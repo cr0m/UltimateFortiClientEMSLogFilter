@@ -10,6 +10,7 @@ Quickly filter FortiClient logs based on specific criteria like source name (src
  5. Save filtered results to a new file with a timestamp in the filename.
  6. Automatically opens the saved file in Notepad++ for quick viewing and further editing. 
  7. Memory feature - Saves filter checkboxes to config.txt
+ 8. Dropdown to select from the last three checkbox states
 
 Usage:
  - Start the tool and use the "Load Log File" button to load the desired log file.
