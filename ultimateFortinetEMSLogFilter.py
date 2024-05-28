@@ -19,8 +19,8 @@ from copy import deepcopy
 #              and other criteria via checkboxes.
 # Author: cr0m
 # Created Date: April 22, 2024
-# Updated Date: May 23rd, 2024
-# Version: 0.3
+# Updated Date: May 28rd, 2024
+# Version: 0.4
 # Usage: Start the tool, load a log file, configure filters, and save the output.
 # -----------------------------------------------------------------------
 #
@@ -91,12 +91,20 @@ def parse_log_file(filepath):
 
     return data, keys_order
 
-# Function to save selected key-value pairs to a new file and open it in Notepad++
 def save_results(selected_keys, all_data, original_file, filter_text, exclude_filter, context_lines):
     """ Save the selected key-value pairs to a new file with timestamp, then open it in Notepad++. """
     timestamp = datetime.now().strftime("%H%M%S")  # Generate a timestamp for the new filename
-    new_filename = f"{os.path.splitext(original_file)[0]}_results_{timestamp}.txt"  # Construct the new filename
-    with open(new_filename, 'w') as file:
+
+    # Get the directory of the original file
+    original_file_dir = os.path.dirname(original_file)
+
+    # Construct the new filename
+    new_filename = f"{os.path.splitext(os.path.basename(original_file))[0]}_results_{timestamp}.txt"
+
+    # Construct the full path for the new file
+    new_file_path = os.path.join(original_file_dir, new_filename)
+
+    with open(new_file_path, 'w') as file:
         for prefix, line, idx in all_data:
             # Check if the line matches the filter criteria
             contains_filter = filter_text.lower() in prefix.lower() or any(filter_text.lower() in v.lower() for v in line.values())
@@ -113,7 +121,7 @@ def save_results(selected_keys, all_data, original_file, filter_text, exclude_fi
     # Open the file in Notepad++
     try:
         notepad_plus_path = "C:\\Program Files\\Notepad++\\notepad++.exe"
-        subprocess.run([notepad_plus_path, new_filename])  # Use subprocess to open Notepad++
+        subprocess.run([notepad_plus_path, new_file_path])  # Use subprocess to open Notepad++
     except Exception as e:
         messagebox.showerror("Error", f"Failed to open Notepad++: {e}")  # Show an error if Notepad++ cannot be opened
 
@@ -217,7 +225,7 @@ def save_filtered_results():
 
 # GUI Setup
 root = tk.Tk()
-root.title("Ultimate FortiClient EMS Log Filter v.3")
+root.title("Ultimate FortiClient EMS Log Filter v.4")
 root.geometry("450x650")
 
 # Frame to contain the Load button and combobox
